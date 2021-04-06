@@ -62,7 +62,8 @@ namespace RobotEurobot2Roues
             /// Création des liens entre module, sauf depuis et vers l'interface graphique           
             usbDriver.OnUSBDataReceivedEvent += msgDecoder.DecodeMsgReceived;                                   // Transmission des messages reçus par l'USB au Message Decoder
             msgDecoder.OnMessageDecodedEvent += robotMsgProcessor.ProcessRobotDecodedMessage;                   // Transmission les messages décodés par le Message Decoder au Message Processor
-
+            positioning2Wheels.OnCalculatedLocationEvent += localWorldMapManager.OnPhysicalPositionReceived;  // Transmission des messages du Global Positioning vers le LocalWorldMap            
+            
             //Events d'activation et configuration de l'asservissement en vitesse depuis le Strategy Manager
             strategyManager.On2WheelsToPolarMatrixSetupEvent += robotMsgGenerator.GenerateMessage2WheelsToPolarMatrixSet;   //Transmission des messages de set-up de la matrice de transformation moteurindepeandt -> polaire en embarqué
             strategyManager.On2WheelsAngleSetupEvent += robotMsgGenerator.GenerateMessage2WheelsAngleSet;                   //Transmission des messages de set-up de la config angulaire des roues en embarqué
@@ -138,8 +139,10 @@ namespace RobotEurobot2Roues
             robotMsgProcessor.OnMessageCounterEvent += interfaceRobot.MessageCounterReceived;
             robotMsgGenerator.OnSetSpeedConsigneToRobotReceivedEvent += interfaceRobot.UpdatePolarSpeedConsigneOnGraph; //Valable quelque soit la source des consignes vitesse
 
+            localWorldMapManager.OnLocalWorldMapForDisplayOnlyEvent += interfaceRobot.OnLocalWorldMapStrategyEvent;  // Connection entre 2 blocs 
+
             /// Envoi des ordres en provenance de l'interface graphique
-            
+
             interfaceRobot.OnCtrlClickOnLocalWorldMapEvent += trajectoryGenerator.OnWaypointReceived;
 
             interfaceRobot.OnEnableDisableMotorsFromInterfaceGeneratedEvent += robotMsgGenerator.GenerateMessageEnableDisableMotors;

@@ -6,6 +6,7 @@ using Utilities;
 using WorldMap;
 using ZeroFormatter;
 
+
 namespace WorldMapManager
 {
     public class LocalWorldMapManager
@@ -24,12 +25,14 @@ namespace WorldMapManager
 
         public void OnPhysicalPositionReceived(object sender, EventArgsLibrary.LocationArgs e)
         {
+           
             if (localWorldMap == null)
                 return;
             if (localWorldMap.RobotId == e.RobotId)
             {
                 localWorldMap.robotLocation = e.Location; //Update de la robot Location dans la local world map
                 OnLocalWorldMapForDisplayOnly(localWorldMap); //Event de transmission de la local world map
+
             }
         }
 
